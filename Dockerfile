@@ -24,9 +24,7 @@ WORKDIR /app/stable-diffusion-webui
 ENV MODEL_URL=${MODEL_URL}
 ENV HF_TOKEN=${HF_TOKEN}
 
-RUN python -m pip install markupsafe==2.0.1
-RUN pip  install markupsafe==2.0.1
-RUN pip3  install markupsafe==2.0.1
+RUN pip install -U markupsafe
 RUN pip install tqdm requests
 ADD download_checkpoint.py .
 RUN python download_checkpoint.py
