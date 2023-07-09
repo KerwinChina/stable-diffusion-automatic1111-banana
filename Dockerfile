@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.7.1-runtime-ubuntu22.04
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
   
 RUN apt update && apt-get -y install git wget \
     python3.10 python3.10-venv python3-pip \
@@ -17,7 +17,7 @@ RUN wget -O models/Stable-diffusion/model.ckpt 'https://huggingface.co/stability
 RUN echo 2
 ADD prepare.py .
 RUN python prepare.py --skip-torch-cuda-test --xformers --reinstall-torch --reinstall-xformers
-
+RUN pip install MarkupSafe==2.0.0 torchmetrics==0.11.4 triton
 ADD download.py download.py
 RUN python download.py --use-cpu=all
 
