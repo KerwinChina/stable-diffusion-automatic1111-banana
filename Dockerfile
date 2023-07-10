@@ -1,4 +1,6 @@
 FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
+ENV TZ=Asia/Kolkata \
+    DEBIAN_FRONTEND=noninteractive
   
 RUN apt update && apt-get -y install git wget \
     python3.10 python3-venv python3-pip \
