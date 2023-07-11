@@ -1,7 +1,13 @@
 FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 ENV TZ=Asia/Kolkata \
     DEBIAN_FRONTEND=noninteractive
-  
+    
+# To use a different model, change the model URL below:
+ARG MODEL_URL='https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt'
+
+# If you are using a private Huggingface model (sign in required to download) insert your Huggingface
+# access token (https://huggingface.co/settings/tokens) below:
+ARG HF_TOKEN=''
 RUN apt update && apt-get -y install git wget \
     python3.10 python3-venv python3-pip \
     build-essential libgl-dev libglib2.0-0 vim
@@ -15,10 +21,16 @@ RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
     git checkout 3e0f9a75438fa815429b5530261bcf7d80f3f101
 WORKDIR /app/stable-diffusion-webui
 
-RUN wget -O models/Stable-diffusion/model.ckpt 'https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt'
-RUN echo 2
+ENV MODEL_URL=${MODEL_URL}
+ENV HF_TOKEN=${HF_TOKEN}
+
+RUN pip install tqdm requests
+ADD download_checkpoint.py .
+RUN python download_checkpoint.py
+
 ADD prepare.py .
 RUN python prepare.py --skip-torch-cuda-test --xformers --reinstall-torch --reinstall-xformers
+
 RUN pip install MarkupSafe==2.0.0 torchmetrics==0.11.4 triton
 ADD download.py download.py
 RUN python download.py --use-cpu=all
