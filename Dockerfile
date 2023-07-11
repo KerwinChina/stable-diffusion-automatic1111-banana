@@ -17,8 +17,7 @@ RUN useradd -ms /bin/bash banana
 WORKDIR /app
 
 RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cd stable-diffusion-webui && \
-    git checkout 3e0f9a75438fa815429b5530261bcf7d80f3f101
+    cd stable-diffusion-webui     
 WORKDIR /app/stable-diffusion-webui
 
 ENV MODEL_URL=${MODEL_URL}
