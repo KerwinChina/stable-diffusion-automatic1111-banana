@@ -24,7 +24,7 @@ ADD download.py download.py
 RUN python download.py --use-cpu=all
 
 RUN pip install dill
-
+RUN pip install potassium
 RUN mkdir -p extensions/banana/scripts
 ADD script.py extensions/banana/scripts/banana.py
 ADD app.py app.py
